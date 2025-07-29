@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Khracha Movie Sync</title>
+  </head>
+  <body>
+    <video id="video" width="600" controls>
+      <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+      Your browser does not support HTML video.
+    </video>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+      const video = document.getElementById("video");
+
+      video.addEventListener("play", () => socket.emit("play"));
+      video.addEventListener("pause", () => socket.emit("pause"));
+      video.addEventListener("seeked", () => socket.emit("seek", video.currentTime));
+
+      socket.on("play", () => video.play());
+      socket.on("pause", () => video.pause());
+      socket.on("seek", (time) => {
+        video.currentTime = time;
+      });
+    </script>
+  </body>
+</html>
